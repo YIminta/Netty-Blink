@@ -4,6 +4,11 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.Data;
 
+/**
+ * @Auther：yimint
+ * @Date: 2023-08-02 10:16
+ * @Description
+ */
 @Data
 public class JsonMsgDto {
 
@@ -20,5 +25,9 @@ public class JsonMsgDto {
 
     public static String format(JsonMsgDto jsonMsgDto) {
         return JSONUtil.toJsonStr(jsonMsgDto);
+    }
+
+    public static String format(Object obj) {
+        return JSONUtil.toJsonStr(obj);
     }
 }
