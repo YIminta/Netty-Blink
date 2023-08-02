@@ -1,0 +1,16 @@
+syntax = "proto3";
+//定义protobuf的包名称空间
+package com.yimint.netty.common.protocol;
+// [结束声明]
+
+// [开始 java 选项配置]
+option java_package = "protocol";
+option java_outer_classname = "MessageProto";
+// [结束 java 选项配置]
+
+// [开始 消息定义]
+message Message {
+  string id = 1;
+  string content = 2;
+}
+// [结束 消息定义]
