@@ -22,8 +22,8 @@ import org.slf4j.LoggerFactory;
  * @Date: 2023-08-02 10:16
  * @Description
  */
-public class JsonService {
-    private final static Logger LOGGER = LoggerFactory.getLogger(JsonService.class);
+public class JsonServer {
+    private final static Logger LOGGER = LoggerFactory.getLogger(JsonServer.class);
     public static final String SERVER_IP = "127.0.0.1";
     public static final int SERVER_PORT = 54123;
 

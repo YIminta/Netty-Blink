@@ -12,8 +12,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EchoService {
-    private final static Logger LOGGER = LoggerFactory.getLogger(EchoService.class);
+public class EchoServer {
+    private final static Logger LOGGER = LoggerFactory.getLogger(EchoServer.class);
     public static final String SERVER_IP = "127.0.0.1";
     public static final int SERVER_PORT = 54123;
 
