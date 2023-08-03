@@ -38,6 +38,6 @@ public class EchoServiceHandler extends ChannelInboundHandlerAdapter {
         });
 
         //传递到下一个Handler - 当前案例只有一个用户自定义的Handler, 其实不写也无所谓.
-        super.channelRead(ctx, msg);
+        //super.channelRead(ctx, msg);
     }
 }
