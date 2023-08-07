@@ -61,13 +61,13 @@ public class ProtoBufServer {
             ChannelFuture channelFuture = b.bind();
             channelFuture.addListener((future) -> {
                 if (future.isSuccess()) {
-                    LOGGER.info(" ========》反应器线程 回调 Json服务器启动成功，监听端口: " +
+                    LOGGER.info(" ========》反应器线程 回调 Protobuf服务器启动成功，监听端口: " +
                             channelFuture.channel().localAddress());
 
                 }
             });
             channelFuture.sync();
-            LOGGER.info(" 调用线程执行的，Json服务器启动成功，监听端口: " +
+            LOGGER.info(" 调用线程执行的，Protobuf服务器启动成功，监听端口: " +
                     channelFuture.channel().localAddress());
 
             ChannelFuture closeFuture = channelFuture.channel().closeFuture();
