@@ -12,6 +12,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
+import io.netty.handler.stream.ChunkedWriteHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +51,7 @@ public class EchoHttpServer {
                             // 原因是HTTP解码器会在解析每个HTTP消息中生成多个消息对象
                             // 如 HttpRequest/HttpResponse,HttpContent,LastHttpContent
                             pipeline.addLast(new HttpObjectAggregator(65535));
+                            pipeline.addLast(new ChunkedWriteHandler());
                             // 自定义的业务handler
                             pipeline.addLast(new HttpEchoHandler());
                         }
