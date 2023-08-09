@@ -3,6 +3,7 @@ package com.yimint.netty.server.handler;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.yimint.netty.common.util.HttpProtocolHelper;
+import com.yimint.netty.server.sevice.EchoHttpServer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -10,19 +11,15 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.QueryStringDecoder;
-import io.netty.handler.codec.http.multipart.DefaultHttpDataFactory;
-import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
-import io.netty.handler.codec.http.multipart.InterfaceHttpData;
-import io.netty.handler.codec.http.multipart.MixedAttribute;
+import io.netty.handler.codec.http.multipart.*;
 import io.netty.util.CharsetUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static io.netty.handler.codec.http.HttpMethod.POST;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
@@ -34,10 +31,10 @@ import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERR
  * @Description
  */
 public class HttpEchoHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
-
+    private final static Logger LOGGER = LoggerFactory.getLogger(HttpEchoHandler.class);
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
-        if (!request.decoderResult().isSuccess()) {
+        if (!request.decoderResult().isSuccess()) {//判断解码是否成功
             HttpProtocolHelper.sendError(ctx, BAD_REQUEST);
             return;
         }
@@ -50,9 +47,11 @@ public class HttpEchoHandler extends SimpleChannelInboundHandler<FullHttpRequest
         // 1.获取URI
         String uri = request.uri();
         echo.put("request uri", uri);
+        LOGGER.info("request uri：{}", uri);
         // 2.获取请求方法
         HttpMethod method = request.method();
         echo.put("request method", method.toString());
+        LOGGER.info("request method：{}", method);
         // 3.获取请求头
         Map<String, Object> echoHeaders = new HashMap<>();
         HttpHeaders headers = request.headers();
@@ -61,11 +60,13 @@ public class HttpEchoHandler extends SimpleChannelInboundHandler<FullHttpRequest
         }
 
         echo.put("request header", echoHeaders);
+        LOGGER.info("request header：{}", echoHeaders);
         /**
          * 获取uri请求参数
          */
         Map<String, Object> uriDatas = paramsFromUri(request);
         echo.put("paramsFromUri", uriDatas);
+        LOGGER.info("request paramsFromUri：{}", uriDatas);
         // 处理POST请求
         if (POST.equals(request.method())) {
             /**
@@ -73,6 +74,7 @@ public class HttpEchoHandler extends SimpleChannelInboundHandler<FullHttpRequest
              */
             Map<String, Object> postData = dataFromPost(request);
             echo.put("dataFromPost", postData);
+            LOGGER.info("request dataFromPost：{}", postData);
         }
 
 
@@ -126,7 +128,7 @@ public class HttpEchoHandler extends SimpleChannelInboundHandler<FullHttpRequest
                 byte[] reqContent = new byte[content.readableBytes()];
                 content.readBytes(reqContent);
                 String text = new String(reqContent, StandardCharsets.UTF_8);
-                postData = new HashMap<String, Object>();
+                postData = new HashMap<>();
                 postData.put("text", text);
             }
             return postData;
@@ -152,7 +154,6 @@ public class HttpEchoHandler extends SimpleChannelInboundHandler<FullHttpRequest
                 if (fullHttpRequest.content().isReadable()) {
                     String json = fullHttpRequest.content().toString(CharsetUtil.UTF_8);
                     params.put("body", json);
-
                 }
             }
 
@@ -160,6 +161,15 @@ public class HttpEchoHandler extends SimpleChannelInboundHandler<FullHttpRequest
                 if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute) {
                     MixedAttribute attribute = (MixedAttribute) data;
                     params.put(attribute.getName(), attribute.getValue());
+                } else if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.FileUpload) {
+                    MixedFileUpload fileUpload = (MixedFileUpload) data;
+                    String filename = fileUpload.getFilename();
+                    byte[] content = fileUpload.get();
+                    String contentType = fileUpload.getContentType();
+                    params.put("filename", filename);
+                    params.put("contentType", contentType);
+                    params.put("content", Arrays.toString(content));
+                    fileUpload.release();
                 }
             }
         } catch (IOException e) {
@@ -172,10 +182,12 @@ public class HttpEchoHandler extends SimpleChannelInboundHandler<FullHttpRequest
      * 解析json数据（Content-Type = application/json）
      */
     private Map<String, Object> jsonBodyDecode(FullHttpRequest fullHttpRequest) throws UnsupportedEncodingException {
-        Map<String, Object> params = new HashMap<String, Object>();
-
         ByteBuf content = fullHttpRequest.content();
         byte[] reqContent = new byte[content.readableBytes()];
+        if (reqContent.length == 0) {
+            return null;
+        }
+        Map<String, Object> params = new HashMap<String, Object>();
         content.readBytes(reqContent);
         String strContent = new String(reqContent, StandardCharsets.UTF_8);
 
