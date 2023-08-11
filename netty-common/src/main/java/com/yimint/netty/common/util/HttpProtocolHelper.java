@@ -209,16 +209,20 @@ public class HttpProtocolHelper {
      * 发送响应
      */
     public static void sendAndCleanupConnection(ChannelHandlerContext ctx, FullHttpResponse response) {
-        final boolean keepAlive = ctx.channel().attr(KEEP_ALIVE_KEY).get();
+        boolean keepAlive = false;
         HttpUtil.setContentLength(response, response.content().readableBytes());
-        if (!keepAlive) {
-            // 如果不是长连接，设置 connection:close 头部
+        if (ctx.channel().attr(KEEP_ALIVE_KEY).get() == null) {
             response.headers().set(CONNECTION, CLOSE);
-        } else if (isHTTP_1_0(ctx)) {
-            // 如果是1.0版本的长连接，设置 connection:keep-alive 头部
-            response.headers().set(CONNECTION, KEEP_ALIVE);
+        } else {
+            keepAlive = ctx.channel().attr(KEEP_ALIVE_KEY).get();
+            if (!keepAlive) {
+                // 如果不是长连接，设置 connection:close 头部
+                response.headers().set(CONNECTION, CLOSE);
+            } else if (isHTTP_1_0(ctx)) {
+                // 如果是1.0版本的长连接，设置 connection:keep-alive 头部
+                response.headers().set(CONNECTION, KEEP_ALIVE);
+            }
         }
-
         //发送内容
         ChannelFuture writePromise = ctx.channel().writeAndFlush(response);
 
