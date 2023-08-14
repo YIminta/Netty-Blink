@@ -12,7 +12,7 @@ import com.yimint.blink.annotation.BlinkMethod;
 public class HomeRoute {
 
     @BlinkMethod()
-    public String home() {
-        return "Welcome come home NettyHttp";
+    public String home(String name) {
+        return "Welcome come home NettyHttp：" + name;
     }
 }

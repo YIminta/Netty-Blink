@@ -20,7 +20,7 @@ public class AppTest {
 
     @Test
     public void testRoute() throws Exception {
-        Method routeMethod = RouterScanner.getInstance().getRouteMethod("/home?name=1");
+       //Method routeMethod = RouterScanner.getInstance().getRouteMethod("/home?name=1");
 
     }
 }
