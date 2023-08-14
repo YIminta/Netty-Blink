@@ -1,6 +1,6 @@
 package com.yimint.blink;
 
-import com.yimint.blink.serve.HttpServe;
+import com.yimint.blink.server.HttpServer;
 
 /**
  * @Auther：yimint
@@ -9,6 +9,6 @@ import com.yimint.blink.serve.HttpServe;
  */
 public class App {
     public static void main(String[] args) {
-        HttpServe.start();
+        HttpServer.start();
     }
 }
