@@ -2,6 +2,7 @@ package com.yimint.blink.route;
 
 import com.yimint.blink.annotation.BlinkController;
 import com.yimint.blink.annotation.BlinkMethod;
+import com.yimint.blink.config.BlinkConfig;
 import com.yimint.blink.refletc.ClassScanner;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import org.slf4j.Logger;
@@ -39,7 +40,7 @@ public class RouterScanner {
     public Method getRouteMethod(QueryStringDecoder queryStringDecoder) throws Exception {
         if (routes == null) {
             routes = new HashMap<>();
-            initRouteMethod("com.yimint.blink");
+            initRouteMethod(BlinkConfig.getInstance().getRootPackageName());
         }
         Method method = routes.get(queryStringDecoder.path());
         if (method == null) {

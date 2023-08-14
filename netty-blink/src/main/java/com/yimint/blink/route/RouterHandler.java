@@ -1,5 +1,6 @@
 package com.yimint.blink.route;
 
+import com.yimint.blink.bean.RouteBeanManager;
 import io.netty.handler.codec.http.QueryStringDecoder;
 
 import java.lang.reflect.Field;
@@ -46,7 +47,7 @@ public class RouterHandler {
         }
         Object[] object = parseRouteParameter(method, queryStringDecoder);
         String name = method.getDeclaringClass().getName();
-        Object instance = Class.forName(name).newInstance();
+        Object instance = RouteBeanManager.getBean(name);
         Object result;
         if (object == null) {
             result = method.invoke(instance);

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+import com.yimint.blink.annotation.BlinkController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +20,7 @@ public class ClassScanner {
 
 
     private static Map<String, Class<?>> routeMap = null;
+    private static Map<String, Class<?>> routeBeanMap = null;
     private static Set<Class<?>> classes = null;
 
     public static Set<Class<?>> getClasses(String packageName) {
@@ -66,5 +68,23 @@ public class ClassScanner {
                 classes.add(clazz);
             }
         }
+    }
+
+    public static Map<String, Class<?>> getRouteBeanMap(String packageName) throws Exception {
+        if (routeBeanMap == null) {
+            Set<Class<?>> clsList = getClasses(packageName);
+
+            if (clsList == null || clsList.isEmpty()) {
+                return routeBeanMap;
+            }
+            routeBeanMap = new HashMap<>(16);
+            for (Class<?> cls : clsList) {
+                BlinkController controller = cls.getAnnotation(BlinkController.class);
+                if (controller != null){
+                    routeBeanMap.put(controller.value() == null ? cls.getName() : controller.value(), cls);
+                }
+            }
+        }
+        return routeBeanMap;
     }
 }

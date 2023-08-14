@@ -2,6 +2,7 @@ package com.yimint.blink.server;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.yimint.blink.Handler.HttpHandler;
+import com.yimint.blink.config.BlinkConfig;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -23,9 +24,7 @@ import org.slf4j.LoggerFactory;
  */
 public class HttpServer {
     private final static Logger LOGGER = LoggerFactory.getLogger(HttpServer.class);
-    public static final String SERVER_IP = "127.0.0.1";
-    public static final int SERVER_PORT = 54123;
-
+    public static final int SERVER_PORT = BlinkConfig.getInstance().getPort();
 
     public static void start() {
         ServerBootstrap b = new ServerBootstrap();
