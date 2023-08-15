@@ -2,6 +2,7 @@ package com.yimint.blink.config;
 
 import com.yimint.blink.bean.RouteBeanManager;
 import com.yimint.blink.configuration.ApplicationConfiguration;
+import com.yimint.blink.constant.BlinkConstant;
 import com.yimint.blink.refletc.ClassScanner;
 
 import java.io.File;
@@ -22,6 +23,7 @@ import static com.yimint.blink.constant.BlinkConstant.PROPERTIES_NAME;
 public class BlinkInitialize {
 
     public static void init(Class<?> clazz) throws Exception {
+        System.out.println(BlinkConstant.LOGO);
 
         initConfiguration(clazz);
 
