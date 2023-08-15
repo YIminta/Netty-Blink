@@ -1,4 +1,4 @@
-package com.yimint.blink.Handler;
+package com.yimint.blink.handler;
 
 import com.yimint.blink.route.RouterHandler;
 import com.yimint.blink.route.RouterScanner;

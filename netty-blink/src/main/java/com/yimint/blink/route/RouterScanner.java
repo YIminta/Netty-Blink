@@ -3,6 +3,8 @@ package com.yimint.blink.route;
 import com.yimint.blink.annotation.BlinkController;
 import com.yimint.blink.annotation.BlinkMethod;
 import com.yimint.blink.config.BlinkConfig;
+import com.yimint.blink.exception.BlinkException;
+import com.yimint.blink.exception.StatusEnum;
 import com.yimint.blink.refletc.ClassScanner;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import org.slf4j.Logger;
@@ -37,14 +39,14 @@ public class RouterScanner {
         return routerScanner;
     }
 
-    public Method getRouteMethod(QueryStringDecoder queryStringDecoder) throws Exception {
+    public Method getRouteMethod(QueryStringDecoder queryStringDecoder) {
         if (routes == null) {
             routes = new HashMap<>();
             initRouteMethod(BlinkConfig.getInstance().getRootPackageName());
         }
         Method method = routes.get(queryStringDecoder.path());
         if (method == null) {
-            throw new Exception("url not match method");
+            throw new BlinkException(StatusEnum.URL_NOT_FOUND);
         }
         return method;
     }

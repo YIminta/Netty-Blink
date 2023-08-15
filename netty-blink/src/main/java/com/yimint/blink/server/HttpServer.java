@@ -1,7 +1,7 @@
 package com.yimint.blink.server;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.yimint.blink.Handler.HttpHandler;
+import com.yimint.blink.handler.HttpHandler;
 import com.yimint.blink.config.BlinkConfig;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;

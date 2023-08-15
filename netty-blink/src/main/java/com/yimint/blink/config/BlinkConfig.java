@@ -1,5 +1,8 @@
 package com.yimint.blink.config;
 
+import com.yimint.blink.exception.BlinkException;
+import com.yimint.blink.exception.StatusEnum;
+
 /**
  * @Auther：yimint
  * @Date: 2023-08-14 16:33
@@ -14,6 +17,7 @@ public final class BlinkConfig {
         }
         return config;
     }
+
     private String rootPackageName;
 
     private String rootPath;
@@ -27,7 +31,7 @@ public final class BlinkConfig {
 
     public void setRootPackageName(Class<?> clazz) {
         if (clazz.getPackage() == null) {
-
+            throw new BlinkException(StatusEnum.CLASS_NOT_NULL);
         }
         this.rootPackageName = clazz.getPackage().getName();
     }
