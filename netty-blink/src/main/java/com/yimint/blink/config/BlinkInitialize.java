@@ -1,6 +1,7 @@
 package com.yimint.blink.config;
 
 import com.yimint.blink.bean.RouteBeanManager;
+import com.yimint.blink.configuration.ApplicationConfiguration;
 import com.yimint.blink.refletc.ClassScanner;
 
 import java.io.File;
@@ -9,8 +10,9 @@ import java.nio.file.Files;
 import java.util.Map;
 import java.util.Properties;
 
-import static com.yimint.blink.config.BlinkConfig.BLINK_PORT;
-import static com.yimint.blink.config.BlinkConfig.PROPERTIES_NAME;
+import static com.yimint.blink.constant.BlinkConstant.BLINK_PORT;
+import static com.yimint.blink.constant.BlinkConstant.PROPERTIES_NAME;
+
 
 /**
  * @Auther：yimint
@@ -35,10 +37,8 @@ public class BlinkInitialize {
         InputStream stream = Files.newInputStream(new File(property).toPath());
         Properties properties = new Properties();
         properties.load(stream);
-
-        BlinkConfig.getInstance().setProperties(properties);
-
-        String port = properties.get(BLINK_PORT).toString();
+        ApplicationConfiguration.setProperties(properties);
+        String port = ApplicationConfiguration.get(BLINK_PORT);
         if (port != null) {
             BlinkConfig.getInstance().setPort(Integer.parseInt(port));
         }
