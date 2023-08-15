@@ -3,6 +3,7 @@ package com.yimint.blink.handler;
 import com.yimint.blink.route.RouterHandler;
 import com.yimint.blink.route.RouterScanner;
 import com.yimint.netty.common.util.HttpProtocolHelper;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -17,6 +18,7 @@ import java.net.URLDecoder;
  * @Date: 2023-08-11 15:20
  * @Description
  */
+@ChannelHandler.Sharable
 public class HttpHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {

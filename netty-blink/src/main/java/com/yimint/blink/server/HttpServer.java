@@ -26,7 +26,7 @@ public class HttpServer {
     private final static Logger LOGGER = LoggerFactory.getLogger(HttpServer.class);
     public static final int SERVER_PORT = BlinkConfig.getInstance().getPort();
 
-    public static void start() {
+    public static void startServer() {
         ServerBootstrap b = new ServerBootstrap();
         NioEventLoopGroup bossGroup = new NioEventLoopGroup(1);
         NioEventLoopGroup workGroup = new NioEventLoopGroup();
