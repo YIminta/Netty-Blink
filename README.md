@@ -39,6 +39,7 @@ public class HomeRoute {
 }
 ```
 启动访问 http://localhost:54123/home?name=张三
+
 ![img.png](img.png)
 ### 说明
 ```java
